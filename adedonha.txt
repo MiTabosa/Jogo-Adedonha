@@ -1,0 +1,155 @@
+O jogo de Adedonha (também conhecido como "Stop" em algumas regiões) é um jogo de palavras no qual os participantes escolhem uma categoria e, com uma letra aleatória, devem preencher a categoria com palavras que comecem com essa letra. O jogo é geralmente jogado de forma simples entre amigos, mas você pode programar uma versão digital com JavaScript.
+
+Vou te guiar passo a passo na criação de um programa de Adedonha. Vou manter o código simples e explicativo, para que qualquer iniciante consiga entender como implementar essa ideia.
+
+### Estrutura do Jogo de Adedonha
+
+O jogo geralmente envolve as seguintes etapas:
+
+1. O jogador escolhe ou o sistema escolhe uma letra aleatória.
+2. O sistema escolhe uma lista de categorias (ex: "Animal", "Fruta", "País", etc.).
+3. O jogador precisa preencher uma palavra para cada categoria começando com a letra sorteada.
+4. O sistema avalia se a palavra fornecida é válida (por exemplo, não repetir palavras e estar correta na categoria).
+5. O jogador ganha pontos se preencher todas as categorias.
+
+### Passo a Passo: Implementando o Jogo de Adedonha
+
+#### 1. Criando o HTML (estrutura básica)
+
+Primeiro, vamos criar a estrutura básica do jogo. Crie um arquivo `index.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Adedonha</title>
+</head>
+<body>
+    <h1>Jogo de Adedonha</h1>
+    
+    <button id="sortear">Sortear Letra</button>
+    <h3 id="letra-sorteada"></h3>
+
+    <div id="categorias">
+        <h4>Complete as categorias com a letra sorteada:</h4>
+        <ul>
+            <li><label for="animal">Animal:</label><input type="text" id="animal" /></li>
+            <li><label for="fruta">Fruta:</label><input type="text" id="fruta" /></li>
+            <li><label for="pais">País:</label><input type="text" id="pais" /></li>
+        </ul>
+    </div>
+
+    <button id="verificar">Verificar Respostas</button>
+
+    <h3 id="resultado"></h3>
+
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+### Explicação do HTML:
+- A página contém um título com o nome do jogo.
+- Há um botão para sortear a letra e um lugar para mostrar a letra sorteada.
+- Três categorias são apresentadas: "Animal", "Fruta" e "País". O jogador vai preencher uma palavra para cada categoria.
+- Um botão para verificar as respostas do jogador.
+- Um lugar para mostrar o resultado (se as respostas estão corretas ou não).
+
+#### 2. Criando o JavaScript (lógica do jogo)
+
+Agora vamos adicionar o código JavaScript no arquivo `script.js` para implementar a lógica do jogo. Aqui está o código básico:
+
+```javascript
+// Lista de categorias
+const categorias = ["animal", "fruta", "pais"];
+
+// Função para sortear uma letra aleatória
+function sortearLetra() {
+    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const letraSorteada = letras.charAt(Math.floor(Math.random() * letras.length));
+    document.getElementById("letra-sorteada").innerText = `Letra sorteada: ${letraSorteada}`;
+    return letraSorteada;
+}
+
+// Função para verificar se as palavras estão corretas
+function verificarRespostas(letraSorteada) {
+    const respostas = {
+        animal: document.getElementById("animal").value.trim(),
+        fruta: document.getElementById("fruta").value.trim(),
+        pais: document.getElementById("pais").value.trim(),
+    };
+
+    let resultado = "Respostas corretas: ";
+    let todasCorretas = true;
+
+    // Verificar se cada categoria começa com a letra sorteada
+    categorias.forEach(categoria => {
+        if (respostas[categoria].charAt(0).toUpperCase() !== letraSorteada) {
+            resultado += `${categoria.charAt(0).toUpperCase() + categoria.slice(1)} (errado), `;
+            todasCorretas = false;
+        } else {
+            resultado += `${categoria.charAt(0).toUpperCase() + categoria.slice(1)} (correto), `;
+        }
+    });
+
+    if (todasCorretas) {
+        resultado = "Parabéns! Todas as respostas estão corretas!";
+    } else {
+        resultado = resultado.slice(0, -2); // Remove a última vírgula
+    }
+
+    document.getElementById("resultado").innerText = resultado;
+}
+
+// Evento para sortear a letra
+document.getElementById("sortear").addEventListener("click", function() {
+    const letraSorteada = sortearLetra();
+    document.getElementById("verificar").onclick = function() {
+        verificarRespostas(letraSorteada);
+    };
+});
+```
+
+### Explicação do código JavaScript:
+
+1. **Função `sortearLetra()`**:
+   - A função sorteia uma letra aleatória da lista de letras do alfabeto (A-Z).
+   - A letra sorteada é exibida na tela.
+
+2. **Função `verificarRespostas(letraSorteada)`**:
+   - Essa função verifica se as palavras digitadas pelo jogador começam com a letra sorteada.
+   - A função lê as respostas dos campos de input e compara a primeira letra de cada resposta com a letra sorteada.
+   - Se todas as respostas começarem com a letra sorteada, o jogador ganha. Caso contrário, o programa informa quais respostas estavam erradas.
+
+3. **Eventos de Clique**:
+   - Quando o jogador clica no botão "Sortear Letra", a função `sortearLetra()` é chamada para sortear a letra.
+   - Quando o jogador clica no botão "Verificar Respostas", a função `verificarRespostas()` é chamada para checar se as respostas estão corretas.
+
+#### 3. Como aplicar o código:
+
+1. **Estrutura HTML**: Este código cria a interface do jogo, com campos de entrada para as respostas e botões para interagir com o jogo.
+   
+2. **Interatividade JavaScript**:
+   - O código JavaScript adiciona funcionalidade, como a escolha de uma letra aleatória e a verificação das respostas fornecidas pelo jogador.
+
+### Testando o Jogo
+
+Para testar o jogo, você precisa fazer o seguinte:
+
+1. Crie dois arquivos: `index.html` e `script.js`.
+2. Coloque o código HTML no arquivo `index.html`.
+3. Coloque o código JavaScript no arquivo `script.js`.
+4. Abra o arquivo `index.html` em um navegador para jogar.
+
+### Possíveis Melhorias
+
+1. **Adicionar mais categorias**: Você pode adicionar mais categorias como "Cores", "Carro", "Objeto", etc.
+2. **Pontuação**: Implementar um sistema de pontuação baseado nas respostas corretas.
+3. **Limitar o tempo**: Criar um temporizador para desafiar o jogador a dar respostas rapidamente.
+4. **Desafios extras**: Adicionar validação para garantir que a palavra fornecida existe (você pode usar uma API para isso, ou um dicionário de palavras).
+
+### Conclusão
+
+Este código cria um jogo de Adedonha simples e funcional com JavaScript. A estrutura foi organizada para ser fácil de entender para iniciantes em programação. Você pode expandir e melhorar o jogo conforme vai ganhando mais experiência com programação.
